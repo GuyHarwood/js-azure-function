@@ -1,0 +1,396 @@
+{
+  "options": [
+    {
+      "enabled": false,
+      "definition": {
+        "id": "5d58cc01-7c75-450c-be18-a388ddb129ec"
+      },
+      "inputs": {
+        "branchFilters": "[\"+refs/heads/*\"]",
+        "additionalFields": "{}"
+      }
+    },
+    {
+      "enabled": false,
+      "definition": {
+        "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+      },
+      "inputs": {
+        "workItemType": "668174",
+        "assignToRequestor": "true",
+        "additionalFields": "{}"
+      }
+    }
+  ],
+  "variables": {
+    "system.debug": {
+      "value": "false",
+      "allowOverride": true
+    }
+  },
+  "retentionRules": [
+    {
+      "branches": [
+        "+refs/heads/*"
+      ],
+      "artifacts": [],
+      "artifactTypesToDelete": [
+        "FilePath",
+        "SymbolStore"
+      ],
+      "daysToKeep": 10,
+      "minimumToKeep": 1,
+      "deleteBuildRecord": true,
+      "deleteTestResults": true
+    }
+  ],
+  "properties": {},
+  "tags": [],
+  "metrics": [
+    {
+      "name": "CurrentBuildsInQueue",
+      "scope": "refs/heads/master",
+      "intValue": 0
+    },
+    {
+      "name": "CurrentBuildsInProgress",
+      "scope": "refs/heads/master",
+      "intValue": 0
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "https://milkchip.visualstudio.com/8808ac27-01ea-49af-8036-56011d6935e5/_apis/build/Definitions/3?revision=1"
+    },
+    "web": {
+      "href": "https://milkchip.visualstudio.com/8808ac27-01ea-49af-8036-56011d6935e5/_build/definition?definitionId=3"
+    },
+    "editor": {
+      "href": "https://milkchip.visualstudio.com/8808ac27-01ea-49af-8036-56011d6935e5/_build/designer?id=3&_a=edit-build-definition"
+    },
+    "badge": {
+      "href": "https://milkchip.visualstudio.com/8808ac27-01ea-49af-8036-56011d6935e5/_apis/build/status/3"
+    }
+  },
+  "jobAuthorizationScope": 1,
+  "jobTimeoutInMinutes": 60,
+  "jobCancelTimeoutInMinutes": 5,
+  "process": {
+    "phases": [
+      {
+        "steps": [
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "npm install",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "command": "install",
+              "workingDir": "",
+              "verbose": "false",
+              "customCommand": "",
+              "customRegistry": "useNpmrc",
+              "customFeed": "",
+              "customEndpoint": "",
+              "publishRegistry": "useExternalRegistry",
+              "publishFeed": "",
+              "publishEndpoint": ""
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "install azf pack",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "command": "custom",
+              "workingDir": "",
+              "verbose": "false",
+              "customCommand": "install -g azure-functions-pack",
+              "customRegistry": "useNpmrc",
+              "customFeed": "",
+              "customEndpoint": "",
+              "publishRegistry": "useExternalRegistry",
+              "publishFeed": "",
+              "publishEndpoint": ""
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "pack",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "command": "custom",
+              "workingDir": "",
+              "verbose": "false",
+              "customCommand": "run pack",
+              "customRegistry": "useNpmrc",
+              "customFeed": "",
+              "customEndpoint": "",
+              "publishRegistry": "useExternalRegistry",
+              "publishFeed": "",
+              "publishEndpoint": ""
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Delete files from ",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "b7e8b412-0437-4065-9371-edc5881de25b",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "SourceFolder": "",
+              "Contents": "node_modules"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Copy Files to: $(Build.ArtifactStagingDirectory)/functions",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "5bfb729a-a7c8-4a78-a7c3-8d717bb7c13c",
+              "versionSpec": "2.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "SourceFolder": "",
+              "Contents": "**",
+              "TargetFolder": "$(Build.ArtifactStagingDirectory)/functions",
+              "CleanTargetFolder": "false",
+              "OverWrite": "false",
+              "flattenFolders": "false"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Archive $(Build.ArtifactStagingDirectory)/functions",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "d8b84976-e99a-4b86-b885-4849694435b0",
+              "versionSpec": "2.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "rootFolderOrFile": "$(Build.ArtifactStagingDirectory)/functions",
+              "includeRootFolder": "false",
+              "archiveType": "zip",
+              "tarCompression": "gz",
+              "archiveFile": "$(Build.ArtifactStagingDirectory)/Functions.zip",
+              "replaceExistingArchive": "true"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Publish Artifact: drop",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "PathtoPublish": "$(Build.ArtifactStagingDirectory)/Functions.zip",
+              "ArtifactName": "drop",
+              "ArtifactType": "Container",
+              "TargetPath": "",
+              "Parallel": "false",
+              "ParallelCount": "8"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Azure App Service Deploy: guyfunc",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "task": {
+              "id": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
+              "versionSpec": "3.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "ConnectedServiceName": "df6f1a04-2336-4f20-9225-b9961111f9d1",
+              "WebAppKind": "functionapp",
+              "WebAppName": "guyfunc",
+              "DeployToSlotFlag": "false",
+              "ResourceGroupName": "",
+              "SlotName": "",
+              "ImageSource": "Registry",
+              "AzureContainerRegistry": "",
+              "AzureContainerRegistryLoginServer": "",
+              "AzureContainerRegistryImage": "",
+              "AzureContainerRegistryTag": "",
+              "DockerRepositoryAccess": "public",
+              "RegistryConnectedServiceName": "",
+              "PrivateRegistryImage": "",
+              "PrivateRegistryTag": "",
+              "DockerNamespace": "",
+              "DockerRepository": "",
+              "DockerImageTag": "",
+              "VirtualApplication": "",
+              "Package": "$(Build.ArtifactStagingDirectory)/Functions.zip",
+              "BuiltinLinuxPackage": "$(System.DefaultWorkingDirectory)/**/*.zip",
+              "RuntimeStack": "",
+              "StartupCommand": "",
+              "WebAppUri": "",
+              "ScriptType": "",
+              "InlineScript": ":: You can provide your deployment commands here. One command per line.",
+              "ScriptPath": "",
+              "GenerateWebConfig": "false",
+              "WebConfigParameters": "",
+              "AppSettings": "",
+              "ConfigurationSettings": "",
+              "TakeAppOfflineFlag": "false",
+              "UseWebDeploy": "false",
+              "SetParametersFile": "",
+              "RemoveAdditionalFilesFlag": "false",
+              "ExcludeFilesFromAppDataFlag": "false",
+              "AdditionalArguments": "",
+              "RenameFilesFlag": "false",
+              "XmlTransformation": "false",
+              "XmlVariableSubstitution": "false",
+              "JSONFiles": ""
+            }
+          }
+        ],
+        "name": "Phase 1",
+        "refName": "Phase_1",
+        "condition": "succeeded()",
+        "target": {
+          "executionOptions": {
+            "type": 0
+          },
+          "allowScriptsAuthAccessOption": false,
+          "type": 1
+        },
+        "jobAuthorizationScope": "projectCollection",
+        "jobCancelTimeoutInMinutes": 1
+      }
+    ],
+    "type": 1
+  },
+  "repository": {
+    "properties": {
+      "apiUrl": "https://api.github.com/repos/GuyHarwood/js-azure-function",
+      "branchesUrl": "https://api.github.com/repos/GuyHarwood/js-azure-function/branches",
+      "cloneUrl": "https://github.com/GuyHarwood/js-azure-function.git",
+      "fullName": "GuyHarwood/js-azure-function",
+      "manageUrl": "https://github.com/GuyHarwood/js-azure-function",
+      "refsUrl": "https://api.github.com/repos/GuyHarwood/js-azure-function/git/refs",
+      "defaultBranch": "master",
+      "connectedServiceId": "dd41f3a6-c582-44a3-9163-03aff5e9bf2e",
+      "isPrivate": "False",
+      "checkoutNestedSubmodules": "false",
+      "cleanOptions": "0",
+      "fetchDepth": "0",
+      "gitLfsSupport": "false",
+      "reportBuildStatus": "true",
+      "skipSyncSource": "false",
+      "labelSourcesFormat": "$(build.buildNumber)",
+      "labelSources": "0",
+      "definitionId": "-1",
+      "branch": "master"
+    },
+    "id": "GuyHarwood/js-azure-function",
+    "type": "GitHub",
+    "name": "GuyHarwood/js-azure-function",
+    "url": "https://github.com/GuyHarwood/js-azure-function.git",
+    "defaultBranch": "master",
+    "clean": "false",
+    "checkoutSubmodules": false
+  },
+  "processParameters": {},
+  "quality": 1,
+  "authoredBy": {
+    "displayName": "Guy H",
+    "url": "https://app.vssps.visualstudio.com/A174415ea-d9a5-47d5-872b-45027305481b/_apis/Identities/388fd841-8dc4-4226-9751-b50bb7fdb083",
+    "_links": {
+      "avatar": {
+        "href": "https://milkchip.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.YjU0YTEzMjctZTA5NS03MDFkLWE3NWItMmU5ZjQ3MzAxZjgx"
+      }
+    },
+    "id": "388fd841-8dc4-4226-9751-b50bb7fdb083",
+    "uniqueName": "milkchip@outlook.com",
+    "imageUrl": "https://milkchip.visualstudio.com/_api/_common/identityImage?id=388fd841-8dc4-4226-9751-b50bb7fdb083",
+    "descriptor": "msa.YjU0YTEzMjctZTA5NS03MDFkLWE3NWItMmU5ZjQ3MzAxZjgx"
+  },
+  "drafts": [],
+  "queue": {
+    "_links": {
+      "self": {
+        "href": "https://milkchip.visualstudio.com/_apis/build/Queues/9"
+      }
+    },
+    "id": 9,
+    "name": "Hosted VS2017",
+    "url": "https://milkchip.visualstudio.com/_apis/build/Queues/9",
+    "pool": {
+      "id": 4,
+      "name": "Hosted VS2017",
+      "isHosted": true
+    }
+  },
+  "id": 3,
+  "name": "JS Azure Function Deploy",
+  "url": "https://milkchip.visualstudio.com/8808ac27-01ea-49af-8036-56011d6935e5/_apis/build/Definitions/3?revision=1",
+  "uri": "vstfs:///Build/Definition/3",
+  "path": "\\",
+  "type": 2,
+  "queueStatus": 0,
+  "revision": 1,
+  "createdDate": "2018-07-13T18:40:35.757Z",
+  "project": {
+    "id": "8808ac27-01ea-49af-8036-56011d6935e5",
+    "name": "spikes",
+    "url": "https://milkchip.visualstudio.com/_apis/projects/8808ac27-01ea-49af-8036-56011d6935e5",
+    "state": "wellFormed",
+    "revision": 448736499,
+    "visibility": 0
+  }
+}
